@@ -10,44 +10,74 @@
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<style>
-		.draggable { width: 70px; height: 70px; padding: 5px; float: left; margin: 0 10px 10px 0; font-size: .9em; }
-		.ui-widget-header p, .ui-widget-content p { margin: 0; }
-		.cell td {margin: 0;}
-		#snaptarget { height: 60px; }
-		#snaptarget-time {width: 100px;}
-	</style>
-
-
-	<style>  
-	.span12 h1{color:#FE6E4C; font-weight: bold; padding: 5px;}  
-	h3 {margin: 10px 0 10px 0;}  
+		.draggable { 
+			width: 70px; 
+			height: 70px; 
+			padding: 5px; 
+			float: left; 
+			margin: 0 10px 10px 0; 
+			font-size: .9em; }
 	
-	.table th{
-		text-align: center;
-		vertical-align: middle;
-	}
+		.droppable td {
+			margin: 0;}
+	
+		.span12 h1{color:#FE6E4C; font-weight: bold; padding: 5px;}  
+		h3 {margin: 10px 0 10px 0;}  
+		
+		.table th{
+			text-align: center;
+			vertical-align: middle;
+		}
 
-	.table td {
-		text-align: center;
-		vertical-align: middle;
-		width: 150px;
-		height: 75px;
-	}
+		.table td {
+			text-align: center;
+			vertical-align: middle;
+			width: 150px;
+			height: 75px;
+		}
 	</style> 
 
 
 	
 	<script>
-	$(function() {
-		$( "#draggable" ).draggable({ snap: true });
-		$( "#draggable2" ).draggable({ snap: ".ui-widget-header" });
-		$( "#draggable3" ).draggable({ snap: ".ui-widget-header", snapMode: "outer" });
-		$( "#draggable4" ).draggable({ grid: [ 20,20 ] });
-		$( "#draggable5" ).draggable({ grid: [ 80, 80 ] });
-		$( "#draggable6" ).draggable({ snap: ".cell", snapMode: "inner" });
-	});
+	$ ( init );
+
+	var timeslots = ["0830 — 1000", "1000 — 1145"];
+	var acres = ["AA", "SE", "EWS"];
+
+	function init() {
+		
+		//creation of the table fields
+		for (var i = 0; i < 2; i++){
+			$('<tr class = "tablerow"><td>' + timeslots[i] + '</td>').appendTo('#tablerows');
+			
+		}
+
+		for (var i = 0; i < 5; i++){
+			$('<td></td>').appendTo('#tablerow').droppable({
+				accept: '$mods div',
+				drop: handleDrop
+			});
+		}
+
+		//hardcoded creation of acres
+		for (var i = 0; i < 3; i++){
+			$('<div><p>' + acres[i] + '<p></div>').appendTo('#mods').draggable({
+				cursor :'move',	
+			});
+		}
+
+	}	
+
+	function handleDrop (event, ui){
+		$(this).droppable( 'disable' );
+	  	ui.draggable.position( { of: $(this), my: 'center middle', at: 'left top' } );
+	}
+
+
 	</script>
 </head>	
+
 <body>
 
 <div class = "container-fluid">
@@ -57,8 +87,10 @@
 		</div>
 	</div>
 
+	<div id = "mods">
 
-		<table class = "table table-bordered">
+	</div>
+	<table class = "table table-bordered">
 		<thead>
 			<tr>
 				<th>Timeslot</th>
@@ -69,7 +101,10 @@
 				<th>Friday</th>
 			</tr>
 		</thead>
-		<tbody>
+		<tbody id = "tablerows">
+
+
+			<!--
 			<tr>
 				<td id ="snaptarget-time">
 					0830 — 1000</td>
@@ -149,6 +184,8 @@
 				<td></td>
 				<td></td>				
 			</tr>
+
+		-->
 		</tbody>
 	</table>
 	
@@ -161,7 +198,7 @@
 
 		<br clear="both" />
 
-		<div id="draggable6" class="draggable ui-widget-content ui-draggable" style="position: relative; left: 0px; top: 0px; ">
+		<div id="draggable" class="draggable ui-widget-content ui-draggable" style="position: relative; left: 0px; top: 0px; ">
 			<p>I snap to a 20 x 20 grid</p>
 		</div>
 		</div>
